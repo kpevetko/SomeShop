@@ -40,11 +40,7 @@ public class MainController {
         return "";
     }
 
-// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if ((!(auth instanceof AnonymousAuthenticationToken)) && auth != null) {
-//            UserDetails userDetail = (UserDetails) auth.getPrincipal();
-//            System.out.println(userDetail.getUsername());
-//        }
+
 
     //регистрация ввод
     @PostMapping("/signUp")
