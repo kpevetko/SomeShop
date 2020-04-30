@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+    <title>Регистрация</title>
+</head>
+<body>
+<label class="info" id="info"></label>
+
+    <p> Логин: <input id="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/></p>
+    <p> Пароль: <input id="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/></p>
+    <p>
+
+        <button onclick="registrationInShop()">Зарегистрироваться</button>
+    </p>
+
+
+
+
+
+<button onclick="backToIndex()">Назад</button>
+
+
+</body>
+<script>
+    function registrationInShop() {
+
+        var xhttp = new XMLHttpRequest();
+        var login = document.getElementById("username").value;
+        var pass = document.getElementById("password").value;
+        xhttp.open("POST", "/signUp?" + "username=" + login + "&password=" + pass, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.status === 201) {
+                document.getElementById("info").innerText = "Пользователь создан, теперь вы можете зайти в систему";
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+            } else {
+                document.getElementById("info").innerText = "Такой пользователь уже существует";
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+
+            }
+        };
+
+    }
+
+    function backToIndex() {
+        document.location.href = "/"
+    }
+</script>
+</html>

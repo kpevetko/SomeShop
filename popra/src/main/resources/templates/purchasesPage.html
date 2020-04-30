@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible"/>
+    <title>shop</title>
+
+</head>
+<body>
+<div>
+    <h1> Страница покупок </h1>
+</div>
+<div>
+    <table th:width="1000" th:border="2" id="myTable">
+        <tr>
+            <th><b>ID</b></th>
+            <th><b>ID пользователя</b></th>
+            <th><b>ID товара</b></th>
+            <th><b>Дата покупки</b></th>
+            <th><b>Цена покупки</b></th>
+            <th><b>Количество единиц товара</b></th>
+        </tr>
+
+        <tr th:each="purchase : ${purchases}">
+            <td th:text="${purchase.id}"></td>
+            <td th:text="${purchase.idUser}"></td>
+            <td th:text="${purchase.idProduct}"></td>
+            <td th:text="${purchase.date}"></td>
+            <td th:text="${purchase.costAll}"></td>
+            <td th:text="${purchase.numberAll}"></td>
+        </tr>
+    </table>
+</div>
+<br>
+<div>
+    <button onclick="location.reload()"> Обновить страницу</button>
+</div>
+<br>
+<div>
+    <button onclick="location.href = '/admin'"> Назад</button>
+</div>
+</body>
+</html>

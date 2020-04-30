@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible"/>
+    <title>shop</title>
+
+</head>
+
+<body>
+<div>
+    <h1> Страница товаров </h1>
+</div>
+<br>
+<b>
+    <lable id="info" th:align="center"></lable>
+</b>
+<br>
+<div>
+    <table th:width="1000" th:border="2" id="myTable">
+        <tr>
+            <th><b>Номер в БД</b></th>
+            <th><b>Продукт</b></th>
+            <th><b>Описание</b></th>
+            <th><b>Стоимость</b></th>
+            <th><b>Количество на складе</b></th>
+            <th><b>Обновление</b></th>
+            <th><b>Удаление</b></th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td><input th:value="${product.name}"></td>
+            <td><textarea th:text="${product.description}"></textarea></td>
+            <td><input th:value="${product.cost}"></td>
+            <td><input th:value="${product.number}"></td>
+            <td>
+                <button id="butUpdate">Изменить товар</button>
+            </td>
+            <td>
+                <button id="butDelete">Удалить товар</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+<br>
+
+<h4>Добавить новый товар</h4>
+
+<div>
+    <label id="infoNew"></label>
+</div>
+<div>
+    <form method="post">
+        <label>
+            <input type="text" id="nameNew" placeholder="Название"/>
+            <input type="text" id="descriptionNew" placeholder="Описание"/>
+            <input type="text" id="costNew" placeholder="Стоимость"/>
+            <input type="text" id="numberNew" placeholder="Количество на складе"/>
+            <button type="button" onclick="addNewProduct()"> Добавить товар</button>
+        </label>
+    </form>
+</div>
+
+<br>
+<div>
+    <button onclick="location.reload()"> Обновить страницу</button>
+</div>
+<br>
+<div>
+    <button onclick="location.href = '/admin'"> Назад</button>
+</div>
+</body>
+
+<script>
+    //все что ниже могло быть проще
+    var index, table = document.getElementById('myTable');
+    for (var i = 1; i < table.rows.length; i++) {
+        table.rows[i].cells[6].onclick = function () {
+            index = this.parentElement.cells[0].innerText;
+            var c = confirm("Уверены что хотите удалить запись с номером " + index + " ?");
+            if (c === true) {
+                deleteProduct(index);
+                table.deleteRow(this.parentElement.rowIndex);
+            }
+
+        }
+
+        table.rows[i].cells[5].onclick = function () {
+            index = this.parentElement.cells[0].innerText
+            var c = confirm("Уверены что хотите изменить запись с номером " + index + " ?");
+            if (c === true) {
+                if (this.parentElement.cells[1].children[0].value != null &&
+                    this.parentElement.cells[1].children[0].value !== "" &&
+                    this.parentElement.cells[2].children[0].value != null &&
+                    this.parentElement.cells[2].children[0].value !== "" &&
+                    this.parentElement.cells[3].children[0].value != null &&
+                    this.parentElement.cells[3].children[0].value !== "" &&
+                    this.parentElement.cells[4].children[0].value != null &&
+                    this.parentElement.cells[4].children[0].value !== "") {
+                    var xhttp = new XMLHttpRequest();
+                    var name = this.parentElement.cells[1].children[0].value;
+                    var description = this.parentElement.cells[2].children[0].value;
+                    var cost = this.parentElement.cells[3].children[0].value;
+                    var number = this.parentElement.cells[4].children[0].value;
+                    xhttp.open("PUT", "/admin/products?" + "id=" + index + "&name=" + name + "&desc=" + description + "&cost=" + cost + "&number=" + number, true);
+                    xhttp.send();
+                    xhttp.onreadystatechange = function () {
+                        if (this.status === 200) {
+                            document.getElementById("info").innerText = "Товар обновлен";
+
+                        } else {
+                            document.getElementById("info").innerText = "Товар не обновлен, проверьте вводимые данные";
+                        }
+                    };
+                } else {
+
+                    document.getElementById("info").innerText = "Введите данные";
+                }
+            }
+
+        }
+    }
+
+
+    function deleteProduct(index) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("DELETE", "/admin/products?" + "id=" + index, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.status === 200) {
+                document.getElementById("info").innerText = "Товар удален успешно";
+
+            } else {
+                document.getElementById("info").innerText = "При удалении что-то пошло не так";
+            }
+        };
+    }
+
+    function addNewProduct() {
+        if (document.getElementById("nameNew").value != null &&
+            document.getElementById("nameNew").value !== "" &&
+            document.getElementById("descriptionNew").value != null &&
+            document.getElementById("descriptionNew").value !== "" &&
+            document.getElementById("costNew").value != null &&
+            document.getElementById("costNew").value !== "" &&
+            document.getElementById("numberNew").value != null &&
+            document.getElementById("numberNew").value !== "") {
+            var xhttp = new XMLHttpRequest();
+            var name = document.getElementById("nameNew").value;
+            var description = document.getElementById("descriptionNew").value;
+            var cost = document.getElementById("costNew").value;
+            var number = document.getElementById("numberNew").value;
+            xhttp.open("POST", "/admin/products?" + "name=" + name + "&desc=" + description + "&cost=" + cost + "&number=" + number, true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (this.status === 201) {
+
+                    document.getElementById("infoNew").innerText = "Товар добавлен";
+                    document.getElementById("nameNew").value = "";
+                    document.getElementById("descriptionNew").value = "";
+                    document.getElementById("costNew").value = "";
+                    document.getElementById("numberNew").value = "";
+
+                } else {
+                    document.getElementById("infoNew").innerText = "Товар не добавлен, проверьте вводимые данные";
+                    document.getElementById("nameNew").value = "";
+                    document.getElementById("descriptionNew").value = "";
+                    document.getElementById("costNew").value = "";
+                    document.getElementById("numberNew").value = "";
+                }
+            };
+        } else {
+            document.getElementById("infoNew").innerText = "Введите данные";
+        }
+    }
+
+
+</script>
+</html>

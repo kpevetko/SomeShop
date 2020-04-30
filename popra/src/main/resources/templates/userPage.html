@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible"/>
+    <title>shop</title>
+
+</head>
+
+<body>
+<div>
+    <h1> Страница покупок и товаров </h1>
+</div>
+<br>
+<b>
+    <lable id="info" th:align="center"></lable>
+</b>
+<br>
+<div>
+    <table th:width="1000" th:border="2" id="myTable">
+        <tr>
+            <th><b>Продукт</b></th>
+            <th><b>Описание</b></th>
+            <th><b>Стоимость</b></th>
+            <th><b>Остаток товара на складе</b></th>
+            <th><b>Сколько купить?</b></th>
+            <th><b></b></th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.cost}"></td>
+            <td th:text="${product.number}"></td>
+            <td><input id="numProduct" placeholder="количество товара" value="" type="text" pattern="\d"></td>
+            <td>
+                <button id="btmBuy">Купить товар</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+<br>
+
+
+<br>
+<div>
+    <button onclick="location.reload()"> Обновить страницу</button>
+</div>
+<br>
+<div>
+    <button onclick="location.href = '/'"> На главную страницу</button>
+</div>
+<div>
+    <div>
+        <button onclick="location.href = '/logout'"> Выйти из системы </button>
+    </div>
+</div>
+</body>
+
+
+
+<script>
+    var productName, numOf, table = document.getElementById('myTable');
+    for (var i = 1; i < table.rows.length; i++) {
+        table.rows[i].cells[5].children[0].onclick = function () {
+            productName = this.parentElement.parentElement.children[0].innerText;
+            numOf = this.parentElement.parentElement.children[4].children[0].value;
+            buyProductFunction(productName,numOf);
+            this.parentElement.parentElement.children[4].children[0].value="";
+        }
+    }
+
+    function buyProductFunction(productName, num) {
+        if(num!==null && num !==""){
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("PUT", "/user/products?" + "name=" + productName + "&numOf=" + num, true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (this.status === 200) {
+                    document.getElementById("info").innerText = "Товар куплен";
+                } else {
+                    document.getElementById("info").innerText = "Недостаточно товара";
+                }
+            };
+        }else {
+            document.getElementById("info").innerText = "Введите количество товара которое хотите купить";
+        }
+
+    }
+
+
+</script>
+</html>
