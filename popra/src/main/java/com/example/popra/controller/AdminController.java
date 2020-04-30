@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
+
     private final ProductService productService;
     private final PurchaseService purchaseService;
 

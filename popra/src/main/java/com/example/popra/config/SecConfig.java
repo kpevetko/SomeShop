@@ -1,4 +1,4 @@
-package com.example.popra;
+package com.example.popra.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
