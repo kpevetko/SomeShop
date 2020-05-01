@@ -13,9 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-
+@Transactional
 @Service
 public class ProductServiceImpl implements ProductService {
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -88,7 +89,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    //показывает все продукты сортируя их
+    //вытаскивает все продукты сортируя их
+    @Transactional(readOnly = true)
     @Override
     public Iterable<Product> findAll() {
         return productRepository.findAllByNumberGreaterThanOrderByIdAsc(0);
@@ -111,24 +113,26 @@ public class ProductServiceImpl implements ProductService {
     public boolean buyProduct(String name, Integer numOf) {
         logger.info(String.format("Покупка товара [название: %s количество: %s] (начало)", name, numOf));
         try {
-            Product product = productRepository.getProductByName(name);
-            if (product.getNumber() >= numOf) {
-                Purchase purchase = new Purchase();
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                if ((!(auth instanceof AnonymousAuthenticationToken)) && auth != null) {
-                    UserDetails userDetail = (UserDetails) auth.getPrincipal();
-                    purchase.setIdUser(userRepository.findByUsername(userDetail.getUsername()).getId());
+            synchronized (productRepository) {
+                Product product = productRepository.getProductByName(name);
+                if (product.getNumber() >= numOf) {
+                    Purchase purchase = new Purchase();
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    if ((!(auth instanceof AnonymousAuthenticationToken)) && auth != null) {
+                        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+                        purchase.setIdUser(userRepository.findByUsername(userDetail.getUsername()).getId());
+                    }
+                    purchase.setIdProduct(product.getId());
+                    purchase.setDate(new Date());
+                    purchase.setCostAll(product.getCost() * numOf);
+                    purchase.setNumberAll(numOf);
+                    productRepository.updateProductByName(name, numOf);
+                    purchasesRepository.save(purchase);
+                    logger.info(String.format("Покупка товара [название: %s количество: %s] (успешно)", name, numOf));
+                } else {
+                    logger.info(String.format("Покупка товара [название: %s количество: %s] (неудачно, недостаточно товара)", name, numOf));
+                    return false;
                 }
-                purchase.setIdProduct(product.getId());
-                purchase.setDate(new Date());
-                purchase.setCostAll(product.getCost() * numOf);
-                purchase.setNumberAll(numOf);
-                productRepository.updateProductByName(name, numOf);
-                purchasesRepository.save(purchase);
-                logger.info(String.format("Покупка товара [название: %s количество: %s] (успешно)", name, numOf));
-            } else {
-                logger.info(String.format("Покупка товара [название: %s количество: %s] (неудачно, недостаточно товара)", name, numOf));
-                return false;
             }
         } catch (Exception e) {
             logger.error(String.format("Покупка товара [название: %s количество: %s] (ошибка, [%s] %s)", name, numOf, e.getMessage(), e));

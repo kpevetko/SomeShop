@@ -5,6 +5,7 @@ import com.example.popra.model.Purchase;
 import com.example.popra.service.ProductService;
 import com.example.popra.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
