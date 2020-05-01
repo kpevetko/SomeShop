@@ -1,6 +1,5 @@
 package com.example.popra.service;
 
-import com.example.popra.controller.AdminController;
 import com.example.popra.model.Authority;
 import com.example.popra.model.User;
 import com.example.popra.repository.AuthoritiesRepository;

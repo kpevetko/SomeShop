@@ -1,7 +1,5 @@
 package com.example.popra.model;
 
-import org.springframework.context.annotation.Scope;
-
 import javax.persistence.*;
 
 @Entity

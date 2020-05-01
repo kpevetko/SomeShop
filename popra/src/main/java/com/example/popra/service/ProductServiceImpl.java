@@ -13,9 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+
 @Transactional
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -63,6 +65,7 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+
     @Override
     public boolean updateProduct(Integer id, String name, String description, Integer cost, Integer number) {
         logger.info(String.format("Изменение товара [название: %s описание: %s стоимость: %s количество%s] (начало)"
@@ -90,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     //вытаскивает все продукты сортируя их
-    @Transactional(readOnly = true)
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED, readOnly = true)
     @Override
     public Iterable<Product> findAll() {
         return productRepository.findAllByNumberGreaterThanOrderByIdAsc(0);
@@ -109,30 +112,29 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)//(isolation = Isolation.SERIALIZABLE)
     @Override
     public boolean buyProduct(String name, Integer numOf) {
         logger.info(String.format("Покупка товара [название: %s количество: %s] (начало)", name, numOf));
         try {
-            synchronized (productRepository) {
-                Product product = productRepository.getProductByName(name);
-                if (product.getNumber() >= numOf) {
-                    Purchase purchase = new Purchase();
-                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                    if ((!(auth instanceof AnonymousAuthenticationToken)) && auth != null) {
-                        UserDetails userDetail = (UserDetails) auth.getPrincipal();
-                        purchase.setIdUser(userRepository.findByUsername(userDetail.getUsername()).getId());
-                    }
-                    purchase.setIdProduct(product.getId());
-                    purchase.setDate(new Date());
-                    purchase.setCostAll(product.getCost() * numOf);
-                    purchase.setNumberAll(numOf);
-                    productRepository.updateProductByName(name, numOf);
-                    purchasesRepository.save(purchase);
-                    logger.info(String.format("Покупка товара [название: %s количество: %s] (успешно)", name, numOf));
-                } else {
-                    logger.info(String.format("Покупка товара [название: %s количество: %s] (неудачно, недостаточно товара)", name, numOf));
-                    return false;
+            Product product = productRepository.getProductByName(name);
+            if (product.getNumber() >= numOf) {
+                Purchase purchase = new Purchase();
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                if ((!(auth instanceof AnonymousAuthenticationToken)) && auth != null) {
+                    UserDetails userDetail = (UserDetails) auth.getPrincipal();
+                    purchase.setIdUser(userRepository.findByUsername(userDetail.getUsername()).getId());
                 }
+                purchase.setIdProduct(product.getId());
+                purchase.setDate(new Date());
+                purchase.setCostAll(product.getCost() * numOf);
+                purchase.setNumberAll(numOf);
+                productRepository.updateProductByName(name, numOf);
+                purchasesRepository.save(purchase);
+                logger.info(String.format("Покупка товара [название: %s количество: %s] (успешно)", name, numOf));
+            } else {
+                logger.info(String.format("Покупка товара [название: %s количество: %s] (неудачно, недостаточно товара)", name, numOf));
+                return false;
             }
         } catch (Exception e) {
             logger.error(String.format("Покупка товара [название: %s количество: %s] (ошибка, [%s] %s)", name, numOf, e.getMessage(), e));

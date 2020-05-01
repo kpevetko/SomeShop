@@ -1,13 +1,11 @@
 package com.example.popra.repository;
 
 import com.example.popra.model.Product;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(value = "prototype")
