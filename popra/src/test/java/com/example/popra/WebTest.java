@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Scope;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -102,66 +99,23 @@ public class WebTest {
                     .andDo(print())
                     .andExpect(status().isCreated());
         }
-     /*   for (int i = 0; i < 10; i++) {
-            this.mockMvc.perform(SecurityMockMvcRequestBuilders.formLogin("/signIn").user("user" + i).password("user" + i))
-                    .andDo(print())
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/"));
-        }*/
-
-       /* for (int i = 0; i < 2; i++) {
-            ThreadMy t = new ThreadMy();
-            t.mockMvc = this.mockMvc;
-            t.i = i;
-            t.start();
-        }
-        Thread.sleep(10000);*/
     }
 
-
-
-   /* class ThreadMy extends Thread {
-        public MockMvc mockMvc;
-        public int i;
-
-        @Override
-        public void run() {
-
-            while (WebTest.atomicInteger.get() > 0) {
-                //нить засыпает на случайное время
-                int a = (int) (Math.random() * (500 - 100)) + 100;
-                try {
-                    this.mockMvc.perform(put("/user/products").with(user("user" + i)).param("name", "вилка").param("numOf", "10"))
-                            .andDo(print())
-                            .andExpect(status().isOk());
-                    WebTest.atomicInteger.getAndDecrement();
-                    Thread.sleep(a);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }
-    }*/
-
-
+    //проверка логики регистрации и покупок
     @Test
     public void UX() throws Exception {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             CreateNewUserThread userThread = new CreateNewUserThread();
             userThread.mockMvc = mockMvc;
-            //userThread.i = i;
             userThread.start();
         }
         Thread.sleep(10000);
     }
 
-    public static AtomicInteger atomicInteger = new AtomicInteger(100);
+    public static AtomicInteger atomicInteger = new AtomicInteger(50);
 
     public class CreateNewUserThread extends Thread {
         public MockMvc mockMvc;
-        //public int i;
 
         public void registration() throws Exception {
             int numU = (int) (Math.random() * (100 - 1)) + 1;
@@ -187,9 +141,8 @@ public class WebTest {
 
         @Override
         public void run() {
-            //for (int i = 0; i < 2; i++) {
             while (WebTest.atomicInteger.get() > 0) {
-                int a = (int) (Math.random() * (500 - 100)) + 100;
+                int a = (int) (Math.random() * (200 - 100)) + 100;
                 try {
                     //registration();
                     buyProduct();
@@ -198,7 +151,6 @@ public class WebTest {
                     e.printStackTrace();
                 }
             }
-            //}
         }
     }
 }

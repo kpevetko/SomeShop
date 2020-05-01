@@ -1,8 +1,6 @@
 package com.example.popra.service;
 
 import com.example.popra.model.Product;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 
