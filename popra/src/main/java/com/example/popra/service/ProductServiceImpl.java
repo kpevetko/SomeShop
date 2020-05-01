@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
     private final PurchasesRepository purchasesRepository;
@@ -91,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
     //показывает все продукты сортируя их
     @Override
     public Iterable<Product> findAll() {
-        return productRepository.findAllByOrderByIdAsc();
+        return productRepository.findAllByNumberGreaterThanOrderByIdAsc(0);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class ProductServiceImpl implements ProductService {
                 purchase.setDate(new Date());
                 purchase.setCostAll(product.getCost() * numOf);
                 purchase.setNumberAll(numOf);
-                purchasesRepository.save(purchase);
                 productRepository.updateProductByName(name, numOf);
+                purchasesRepository.save(purchase);
                 logger.info(String.format("Покупка товара [название: %s количество: %s] (успешно)", name, numOf));
             } else {
                 logger.info(String.format("Покупка товара [название: %s количество: %s] (неудачно, недостаточно товара)", name, numOf));

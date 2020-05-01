@@ -81,9 +81,9 @@
             xhttp.onreadystatechange = function () {
                 if (this.status === 200) {
                     document.getElementById("info").innerText = "Товар куплен";
+                    location.reload();
                 } else {
                     document.getElementById("info").innerText = "Недостаточно товара";
-                    console.log(this.status)
                 }
             };
         }else {

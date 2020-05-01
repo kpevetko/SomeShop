@@ -1,6 +1,7 @@
 package com.example.popra.repository;
 
 import com.example.popra.model.Product;
+import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,7 +19,11 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     @Transactional
     void deleteById(int id);
 
+    //поиск и сортировка всех продуктов
     Iterable<Product> findAllByOrderByIdAsc();
+
+    //поиск всех продуктов где изначение больше А (в данном случае больше 0), а так же сортируем вывод
+    Iterable<Product> findAllByNumberGreaterThanOrderByIdAsc(int a);
 
     Product getProductByName(String name);
 

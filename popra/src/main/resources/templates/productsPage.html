@@ -30,7 +30,8 @@
             <th><b>Обновление</b></th>
             <th><b>Удаление</b></th>
         </tr>
-        <tr th:each="product : ${products}">
+        <tr  th:each="product : ${products}">
+
             <td th:text="${product.id}"></td>
             <td><input th:value="${product.name}"></td>
             <td><textarea th:text="${product.description}"></textarea></td>
