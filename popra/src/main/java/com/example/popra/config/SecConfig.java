@@ -22,10 +22,10 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/", "/signIn", "/signUp").permitAll()
+                .antMatchers("/", "/login", "/registration").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/signIn")//указываем страницу входа
+                .formLogin().loginPage("/login")//указываем страницу входа
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/")//выходим на главную страницу при logOut
                 .and()

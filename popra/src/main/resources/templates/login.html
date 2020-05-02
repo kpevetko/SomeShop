@@ -13,7 +13,7 @@
     You have been logged out.
 </div>
 <div class="chatWindow">
-    <form th:action="@{/signIn}" method="post" name="userForm">
+    <form th:action="@{/login}" method="post" name="userForm">
         <label class="info" id="info"></label>
         <p> Логин: <input name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/></p>
         <p> Пароль: <input name="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/></p>
