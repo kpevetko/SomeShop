@@ -1,20 +1,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+      lang="en">
 <head>
     <title>Вход</title>
 </head>
 <body>
 <div th:if="${param.error}">
-    Invalid username and password.
+    Неверное имя пользователя или пароль.
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<div class="chatWindow">
+<div>
     <form th:action="@{/login}" method="post" name="userForm">
-        <label class="info" id="info"></label>
         <p> Логин: <input name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/></p>
         <p> Пароль: <input name="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/></p>
         <p>
