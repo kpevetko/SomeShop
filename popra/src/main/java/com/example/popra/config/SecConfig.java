@@ -26,8 +26,10 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")//указываем страницу входа
+                .failureUrl("/login?error")
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/")//выходим на главную страницу при logOut
+                .logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/?logout")//выходим на главную страницу при logOut
                 .and()
                 .csrf().disable(); //без этой строки не работают пост, пут и delete запросы нормально
     }

@@ -35,23 +35,25 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public String a(){
+    public String a() {
         System.out.println("ad");
         return "";
     }
 
 
-
     //регистрация ввод
     @PostMapping("/registration")
-    @ResponseBody
-    public ResponseEntity<?> putRegisterPage(
+    // @ResponseBody
+    public String putRegisterPage(
             @RequestParam(value = "username") String login,
             @RequestParam(value = "password") String pass) {
 
         boolean created = userService.createNewUser(login, pass);
+        String answerPage;
 
-        return created ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        answerPage = created ? "redirect:/?regOk" :  "redirect:/registration?error";
+
+        return answerPage;
     }
 
 }
