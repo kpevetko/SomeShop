@@ -23,18 +23,18 @@ public class MainController {
     }
 
     //вход показ
-    @GetMapping("/signIn")
+    @GetMapping("/login")
     public String enterPage() {
-        return "signIn";
+        return "login";
     }
 
     //регистрация показ
-    @GetMapping("/signUp")
+    @GetMapping("/registration")
     public String takeRegisterPage() {
-        return "signUp";
+        return "registration";
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/login")
     public String a(){
         System.out.println("ad");
         return "";
@@ -43,7 +43,7 @@ public class MainController {
 
 
     //регистрация ввод
-    @PostMapping("/signUp")
+    @PostMapping("/registration")
     @ResponseBody
     public ResponseEntity<?> putRegisterPage(
             @RequestParam(value = "username") String login,
