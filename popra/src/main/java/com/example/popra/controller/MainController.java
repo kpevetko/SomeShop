@@ -17,7 +17,7 @@ public class MainController {
 
     @GetMapping
     public String mainPage() {
-        return "index.html";
+        return "index";
     }
 
     //вход показ
@@ -31,8 +31,6 @@ public class MainController {
     public String takeRegisterPage() {
         return "registration";
     }
-
-
 
     //регистрация ввод
     @PostMapping("/registration")
