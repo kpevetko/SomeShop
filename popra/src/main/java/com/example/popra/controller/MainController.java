@@ -2,8 +2,6 @@ package com.example.popra.controller;
 
 import com.example.popra.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +17,7 @@ public class MainController {
 
     @GetMapping
     public String mainPage() {
-        return "index";
+        return "index.html";
     }
 
     //вход показ
@@ -34,17 +32,12 @@ public class MainController {
         return "registration";
     }
 
-    @PostMapping("/login")
-    public String a() {
-        System.out.println("ad");
-        return "";
-    }
 
 
     //регистрация ввод
     @PostMapping("/registration")
     // @ResponseBody
-    public String putRegisterPage(
+    public String postToRegisterPage(
             @RequestParam(value = "username") String login,
             @RequestParam(value = "password") String pass) {
 

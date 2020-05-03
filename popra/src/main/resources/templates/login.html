@@ -1,25 +1,132 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       lang="en">
 <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
     <title>Вход</title>
 </head>
+<style>
+    .divReg {
+        position: absolute;
+        border-radius: 5px;
+        padding: 10px;
+        border: groove black;
+
+    }
+
+    .btmRegistration {
+        float: left;
+        width: 150px;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .btmBack {
+        float: left;
+        margin-left: 20px;
+        width: 75px;
+        border-radius: 5px;
+        padding: 5px;
+
+    }
+
+    .block {
+        position: relative;
+        color: black;
+        height: 33%;
+    }
+
+    #topBlock {
+        position: relative;
+        float: top;
+        width: 50%;
+
+    }
+
+    #bottomBlock {
+        position: relative;
+        float: bottom;
+        width: 50%;
+    }
+
+
+    .leftSidebar {
+        float: left;
+        width: 48%;
+
+    }
+
+    .rightSidebar {
+        float: left;
+        width: 45%;
+
+    }
+
+    .btmLeftSidebar {
+        float: left;
+        width: 60%;
+
+    }
+
+    .btmRightSidebar {
+        float: right;
+        width: 40%;
+
+    }
+
+    .mistakesLabel {
+        color: red;
+    }
+
+</style>
 <body>
 <div th:if="${param.error}">
     Неверное имя пользователя или пароль.
 </div>
-<div>
-    <form th:action="@{/login}" method="post" name="userForm">
-        <p> Логин: <input name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/></p>
-        <p> Пароль: <input name="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/></p>
-        <p>
+<div class="divReg">
+    <form th:action="@{/login}"  method="POST">
+        <div id="topBlock">
+            <div class="leftSidebar">
+                <p>
+                    <label>Логин:</label>
+                </p>
+            </div>
+            <div class="rightSidebar">
+                <p>
+                    <input name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/>
+                </p>
+            </div>
 
-            <button type="submit">Войти</button>
-            <button onclick="backToIndex()">Назад</button>
-        </p>
+        </div>
+        <div id="bottomBlock">
+            <div class="leftSidebar">
+                <p>
+                    <label>Пароль:</label>
+                </p>
+            </div>
+            <div class="rightSidebar">
+                <p>
+                    <input name="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/>
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <div class="btmLeftSidebar">
+                <p>
+                    <button class="btmRegistration" type="submit">Войти</button>
+                </p>
+            </div>
+            <div class="btmRightSidebar">
+                <p>
+                    <button class="btmBack" onclick="backToIndex()">Назад</button>
+                </p>
+            </div>
+        </div>
     </form>
-
 </div>
+
 </body>
 <script>
     function backToIndex() {
