@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="en">
+<head>
+    <title>Вход</title>
+</head>
+<body>
+<div th:if="${param.error}">
+    Неверное имя пользователя или пароль.
+</div>
+<div>
+    <form th:action="@{/login}" method="post" name="userForm">
+        <p> Логин: <input name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/></p>
+        <p> Пароль: <input name="password" type="password" placeholder="Пароль" required pattern="^[0-9a-zA-Z]+$"/></p>
+        <p>
+
+            <button type="submit">Войти</button>
+            <button onclick="backToIndex()">Назад</button>
+        </p>
+    </form>
+
+</div>
+
+</body>
+<script>
+    function backToIndex() {
+        document.location.href = "/"
+    }
+</script>
+</html>
