@@ -25,8 +25,8 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/login", "/registration").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login")//указываем страницу входа
-                .failureUrl("/login?error")
+                .formLogin().loginPage("/")//указываем страницу входа
+                .failureUrl("/?error")
                 .and()
                 .logout().logoutUrl("/logout")
                 .logoutSuccessUrl("/?logout")//выходим на главную страницу при logOut

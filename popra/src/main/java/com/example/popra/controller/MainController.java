@@ -20,18 +20,6 @@ public class MainController {
         return "index";
     }
 
-    //вход показ
-    @GetMapping("/login")
-    public String enterPage() {
-        return "login";
-    }
-
-    //регистрация показ
-    @GetMapping("/registration")
-    public String takeRegisterPage() {
-        return "registration";
-    }
-
     //регистрация ввод
     @PostMapping("/registration")
     // @ResponseBody
@@ -42,7 +30,7 @@ public class MainController {
         boolean created = userService.createNewUser(login, pass);
         String answerPage;
 
-        answerPage = created ? "redirect:/?regOk" :  "redirect:/registration?error";
+        answerPage = created ? "redirect:/?regOk" :  "redirect:/?errorReg";
 
         return answerPage;
     }

@@ -3,6 +3,36 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
 
+<style>
+    .inOutBtm {
+        color: white;
+        background-color: #7C8A8B;
+        border-radius: 5px;
+        height: 40px;
+        float: right;
+    }
+
+    .text {
+        font-size: 20px;
+        float: right;
+        margin-top: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .block {
+        float: right;
+
+    }
+
+    .leftBlock {
+        float: left;
+    }
+
+    .rightBlock {
+        float: right;
+    }
+</style>
+
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible"/>
@@ -11,6 +41,14 @@
 </head>
 
 <body>
+<div class="block" sec:authorize="isAuthenticated()">
+    <div class="leftBlock">
+        <label class="text" sec:authentication="name"></label>
+    </div>
+    <div class="rightBlock">
+        <button class="inOutBtm" onclick="location.href = '/logout'"> Выйти</button>
+    </div>
+</div>
 <div>
     <h1> Страница товаров </h1>
 </div>
