@@ -40,9 +40,86 @@
     .rightBlock {
         float: right;
     }
+
+    .module-login-Up {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.8;
+        background-color: black;
+        display: none;
+    }
+
+    .module-login-In {
+        background-color: white;
+        width: 400px;
+        height: 250px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .module-registration-Up {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.8;
+        background-color: black;
+        display: none;
+    }
+
+    .module-registration-In {
+        background-color: white;
+        width: 400px;
+        height: 250px;
+        border-radius: 5px;
+        position: relative;
+    }
+    .forInputs {
+        height: 30px;
+        width: 50%;
+        display: block;
+        margin: 20px auto;
+        border-radius: 2px;
+        font-size: 15px;
+    }
+
+    .forBtm {
+        height: 30px;
+        width: 50%;
+        display: block;
+        margin: 20px auto;
+        border-radius: 10px;
+        font-size: 15px;
+        color: white;
+        background-color: #7C8A8B;
+    }
+
+    .forText {
+        text-align: center;
+        display: block;
+        margin-top: 10px;
+        font-size: 20px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 14px;
+        color: black;
+        font-size: 40px;
+        font-weight: bold;
+        transform: rotate(45deg);
+        cursor: pointer;
+    }
 </style>
 
-<body>
+<body onload="f1()">
 
 <div>
     <div>
@@ -56,10 +133,10 @@
         </div>
         <div class="block" sec:authorize="!isAuthenticated()">
             <div class="leftBlock">
-                <button class="inOutBtm" onclick="location.href = '/login'"> Войти</button>
+                <button class="inOutBtm" onclick=takeLoginForm()> Войти</button>
             </div>
             <div class="rightBlock">
-                <button class="inOutBtm" onclick="location.href = '/registration'"> Зарегистрироваться</button>
+                <button class="inOutBtm" onclick=takeRegistrationForm()> Зарегистрироваться</button>
             </div>
         </div>
     </div>
@@ -71,7 +148,44 @@
 <div th:if="${param.regOk}">
     Вы успешно зарегистрировались.
 </div>
+
+
 <br>
+<div class="module-login-Up">
+    <div class="module-login-In">
+        <div class="close" onclick="fa()">+</div>
+        <div th:if="${param.error}">
+            Некорректный логин или пароль.
+        </div>
+        <form th:action="@{/}" method="POST">
+            <label class="forText">Вход</label>
+            <input class="forInputs" name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/>
+            <input class="forInputs" name="password" type="password" placeholder="Пароль" required
+                   pattern="^[0-9a-zA-Z]+$"/>
+            <button class="forBtm" type="submit">Войти</button>
+        </form>
+
+    </div>
+
+</div>
+<div class="module-registration-Up">
+    <div class="module-registration-In">
+        <div class="close" onclick="fa()">+</div>
+        <div th:if="${param.errorReg}">
+            Такой пользователь уже существует.
+        </div>
+        <form th:action="@{/registration}" method="POST">
+            <label class="forText">Регистрация</label>
+            <input class="forInputs" name="username" type="text" placeholder="Логин" required pattern="^[0-9a-zA-Z]+$"/>
+            <input class="forInputs" name="password" type="password" placeholder="Пароль" required
+                   pattern="^[0-9a-zA-Z]+$"/>
+            <button class="forBtm" type="submit">Регистрация</button>
+        </form>
+
+    </div>
+
+</div>
+
 <div>
     <div sec:authorize="isAuthenticated()">
 
@@ -86,4 +200,29 @@
 
 
 </body>
+<script>
+    //понимаю что можно было проще, но как до такого додумался незнаю
+    function takeLoginForm() {
+        document.querySelector(".module-login-Up").style.display = "flex"
+    }
+
+    function takeRegistrationForm() {
+        document.querySelector(".module-registration-Up").style.display = "flex"
+    }
+    function fa() {
+        location.search = ""
+    }
+
+    function f1() {
+        if (location.search === "?error") {
+            document.querySelector(".module-login-Up").style.display = "flex"
+        } else if (location.search === "?errorReg") {
+            document.querySelector(".module-registration-Up").style.display = "flex"
+        } else {
+            document.querySelector(".module-login-Up").style.display = "none"
+            document.querySelector(".module-registration-Up").style.display = "none"
+        }
+    }
+
+</script>
 </html>
