@@ -107,6 +107,14 @@
         font-size: 20px;
     }
 
+    .forAlertText {
+        text-align: center;
+        color: red;
+        display: block;
+        margin-top: 10px;
+        font-size: 20px;
+    }
+
     .close {
         position: absolute;
         top: 15px;
@@ -154,7 +162,7 @@
 <div class="module-login-Up">
     <div class="module-login-In">
         <div class="close" onclick="fa()">+</div>
-        <div th:if="${param.error}">
+        <div class="forAlertText" th:if="${param.error}">
             Некорректный логин или пароль.
         </div>
         <form th:action="@{/}" method="POST">
@@ -171,7 +179,7 @@
 <div class="module-registration-Up">
     <div class="module-registration-In">
         <div class="close" onclick="fa()">+</div>
-        <div th:if="${param.errorReg}">
+        <div class="forAlertText" th:if="${param.errorReg}">
             Такой пользователь уже существует.
         </div>
         <form th:action="@{/registration}" method="POST">
